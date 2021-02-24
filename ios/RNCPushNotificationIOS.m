@@ -78,17 +78,11 @@ RCT_EXPORT_MODULE()
 {
 }
 
-+ (void)didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)deviceToken
++ (void)didRegisterForRemoteNotificationsWithDeviceToken:(NSString *)deviceToken
 {
-  NSMutableString *hexString = [NSMutableString string];
-  NSUInteger deviceTokenLength = deviceToken.length;
-  const unsigned char *bytes = deviceToken.bytes;
-  for (NSUInteger i = 0; i < deviceTokenLength; i++) {
-    [hexString appendFormat:@"%02x", bytes[i]];
-  }
   [[NSNotificationCenter defaultCenter] postNotificationName:kRemoteNotificationsRegistered
                                                       object:self
-                                                    userInfo:@{@"deviceToken" : [hexString copy]}];
+                                                    userInfo:@{@"deviceToken" : [deviceToken copy]}];
 }
 
 + (void)didFailToRegisterForRemoteNotificationsWithError:(NSError *)error
