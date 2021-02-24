@@ -96,7 +96,13 @@ Then, add the following lines:
 // Required for the register event.
 - (void)application:(UIApplication *)application didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)deviceToken
 {
- [RNCPushNotificationIOS didRegisterForRemoteNotificationsWithDeviceToken:deviceToken];
+  NSMutableString *hexString = [NSMutableString string];
+  NSUInteger deviceTokenLength = deviceToken.length;
+  const unsigned char *bytes = deviceToken.bytes;
+  for (NSUInteger i = 0; i < deviceTokenLength; i++) {
+    [hexString appendFormat:@"%02x", bytes[i]];
+  }
+ [RNCPushNotificationIOS didRegisterForRemoteNotificationsWithDeviceToken:hexString];
 }
 // Required for the notification event. You must call the completion handler after handling the remote notification.
 - (void)application:(UIApplication *)application didReceiveRemoteNotification:(NSDictionary *)userInfo
